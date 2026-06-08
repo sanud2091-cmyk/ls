@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LS.LEAD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple-dark: #7C3AED;
+            --purple-medium: #A855F7;
+            --purple-light: #E9D5FF;
+            --purple-very-light: #F3E8FF;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --accent: #EC4899;
+            --bg: #FAFAFA;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, #F5EDFF 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(124, 58, 237, 0.1);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--purple-dark);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--purple-dark), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--purple-dark);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 6rem;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-radius: 20px;
+            border: 2px solid var(--purple-light);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            animation: slideUp 0.8s ease-out 0.6s both;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.1);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple-light), var(--accent));
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--purple-dark);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.2);
+        }
+
+        .card h3 {
+            color: var(--purple-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-link {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple-medium));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--purple-medium), var(--accent));
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .card-link:hover {
+            transform: scale(1.05);
+        }
+
+        .card-link:hover::before {
+            left: 0;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.1);
+            margin: 2rem 0;
+            border-left: 5px solid var(--purple-dark);
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .content-section h2 {
+            color: var(--purple-dark);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section h3 {
+            color: var(--purple-medium);
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .content-section ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        .content-section li::marker {
+            color: var(--purple-dark);
+            font-weight: 600;
+        }
+
+        /* Members Grid */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .member-card {
+            background: linear-gradient(135deg, var(--purple-very-light) 0%, white 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid var(--purple-light);
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15);
+            border-color: var(--purple-dark);
+        }
+
+        .member-card h4 {
+            color: var(--purple-dark);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .member-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple-medium));
+            color: white;
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--purple-light);
+            color: var(--purple-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--purple-medium);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero {
+                margin-top: 12rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth Scroll */
+        @media (prefers-reduced-motion: no-preference) {
+            * {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-medium) 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-radius: 15px 15px 0 0;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <img src="logo-school.jpg" style="width: 50px; height: 50px; object-fit: contain; margin-right: 0.5rem;">
+            <img src="logo-ls.jpg" style="width: 50px; height: 50px; object-fit: contain; margin-right: 1rem;"> 
+            <div class="logo">LS.LEAD</div>  
+            <ul class="nav-links">
+                <li><a href="#" data-page="home" class="nav-link active">หน้าหลัก</a></li>
+                <li><a href="#" data-page="vision" class="nav-link">วิสัยทัศน์</a></li>
+                <li><a href="#" data-page="policy" class="nav-link">นโยบาย</a></li>
+                <li><a href="#" data-page="members" class="nav-link">สมาชิก</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Pages Container -->
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>ยินดีต้อนรับสู่ LS.LEAD</h1>
+                <p>เราคือพรรคที่นำพาการเปลี่ยนแปลงและสร้างสรรค์อนาคตที่ยั่งยืน</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>👁️ วิสัยทัศน์</h3>
+                    <p>เรามุ่งมั่นในการพัฒนาวิสัยทัศน์ LS.LEAD ที่ชัดเจนเพื่อเป็นผู้นำที่พร้อมพาน้องไปข้างหน้า</p>
+                    <a href="#" data-page="vision" class="card-link">ดูรายละเอียด →</a>
+                </div>
+
+                <div class="card">
+                    <h3>📋 นโยบาย</h3>
+                    <p>นโยบายและกิจกรรมของเราออกแบบมาเพื่อประโยชน์และสุขสwelfare ของน้องๆทั้งหมด</p>
+                    <a href="#" data-page="policy" class="card-link">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <div class="card">
+                    <h3>👥 สมาชิก</h3>
+                    <p>ทีมของเราประกอบด้วยผู้เชี่ยวชาญและผู้นำที่มีความรู้และประสบการณ์ในการบริหาร</p>
+                    <a href="#" data-page="members" class="card-link">ดูทีม →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vision Page -->
+        <div id="vision" class="page">
+            <div class="content-section">
+                <h2>🎯 LS.LEAD วิสัยทัศน์ของเรา</h2>
+                
+                <p style="font-size: 1.1rem; color: var(--purple-dark); font-weight: 600; margin: 2rem 0;">LS.LEAD หมายถึง ผู้นำที่พร้อมพาน้องๆไปข้างหน้า</p>
+
+                <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%); padding: 2rem; border-radius: 12px; margin: 2rem 0;">
+                    <h3 style="margin-top: 0;">📖 LS.LEAD แตกย่อย</h3>
+                    
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: white; border-left: 4px solid var(--purple-dark); border-radius: 8px;">
+                        <h4 style="color: var(--purple-dark); font-size: 1.3rem; margin-bottom: 0.5rem;">L = Listening</h4>
+                        <p style="color: var(--text-light); margin: 0;">รับฟังเสียงของทุกคน</p>
+                    </div>
+
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: white; border-left: 4px solid var(--purple-dark); border-radius: 8px;">
+                        <h4 style="color: var(--purple-dark); font-size: 1.3rem; margin-bottom: 0.5rem;">E = Equality</h4>
+                        <p style="color: var(--text-light); margin: 0;">สร้างความเท่าเทียมในโรงเรียน</p>
+                    </div>
+
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: white; border-left: 4px solid var(--accent); border-radius: 8px;">
+                        <h4 style="color: var(--accent); font-size: 1.3rem; margin-bottom: 0.5rem;">A = Action</h4>
+                        <p style="color: var(--text-light); margin: 0;">เน้นทำจริง ไม่ขายฝัน</p>
+                    </div>
+
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: white; border-left: 4px solid var(--purple-dark); border-radius: 8px;">
+                        <h4 style="color: var(--purple-dark); font-size: 1.3rem; margin-bottom: 0.5rem;">D = Development</h4>
+                        <p style="color: var(--text-light); margin: 0;">มุ่งมั่นพัฒนาโรงเรียน</p>
+                    </div>
+                </div>
+
+                <h3>ค่านิยมหลัก</h3>
+                <ul>
+                    <li><strong>ความซื่อสัตย์</strong> - ในทุกการกระทำและการตัดสินใจ</li>
+                    <li><strong>นวัตกรรม</strong> - ค้นหาวิธีใหม่เพื่อแก้ไขปัญหา</li>
+                    <li><strong>ความเป็นอิสระ</strong> - เอื้อให้สมาชิกคิดอย่างเสรี</li>
+                    <li><strong>ความมุ่งมั่น</strong> - มุ่งเน้นไปยังเป้าหมายของเรา</li>
+                    <li><strong>ความไว้วางใจ</strong> - สร้างความสัมพันธ์ที่มั่นคง</li>
+                </ul>
+
+                <div style="margin-top: 2rem;">
+                    <a href="#" data-page="home" class="btn btn-primary">กลับหน้าแรก</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Policy Page -->
+        <div id="policy" class="page">
+            <div class="content-section">
+                <h2>� นโยบายของ LS.LEAD</h2>
+
+                <h3>1. 🎯 เชือกวิเศษ</h3>
+                <p>เมื่อถึงกริ่งที่ 3 พี่ๆสภาจะเริ่มเอาเชือกมาล้อม โดยคนที่เข้ามาในเชือกไม่ทันจะต้องเลือกหนึ่งในสามวิธี:</p>
+                <ul>
+                    <li>🗑️ เก็บขยะ 10 ชิ้น</li>
+                    <li>📚 ท่องแม่สูตรคูณ 2 แม่</li>
+                    <li>📝 บอกศัพย์มา 5 คำ</li>
+                </ul>
+
+                <h3>2. 🎵 เปิดเพลง</h3>
+                <p>เราจะเริ่มเปิดเพลงตอน <strong>12:05 น.</strong> และปิดตอน <strong>12:45 น.</strong> เพื่อให้น้องๆมีเวลาเตรียมตัวก่อนเข้าแถว</p>
+
+                <h3>3. 💬 กล่องระบายความทุกข์</h3>
+                <p>พี่ๆสภาจะตั้งกล่องไว้ที่จุดต่างๆ เพื่อให้น้องๆที่มีปัญหาสามารถมาระบายความรู้สึกกับพี่ได้ โดย<strong>จะมีเฉพาะพี่ประธาน รองประธาน และเลขาณุการ</strong>เท่านั้นที่รู้เรื่องนี้ และ<strong>จะไม่นำไปพูดต่อ</strong>ค่ะ</p>
+
+                <h3>4. 🍬 ขยะและขนม</h3>
+                <p>เราจะให้นักเรียนเก็บขยะมาเพื่อแลกกับขนมเล็กๆน้อยๆ</p>
+                <ul>
+                    <li>🗓️ กิจกรรมนี้จะจัดเป็นบางวัน</li>
+                    <li>👥 พี่สภาจะนั่งประจำจุดต่างๆ</li>
+                    <li>♻️ เพื่อให้น้องๆนำขยะต่างๆมาแลกกับขนมเล็กๆน้อยๆ</li>
+                </ul>
+
+                <h3>5. ☔ กางร่มไปส่งที่จุดต่างๆ</h3>
+                <p>เราจะมีสภาประจำจุดต่างๆ และมีร่มเพื่อเดินไปส่งนักเรียนไปยังจุดต่างๆ เพื่อที่นักเรียนจะได้ไม่ต้องเสี่ยงต่อการป่วยจากสภาพอากาศ</p>
+
+                <h3>6. ♻️ การนำกระดาษมารีไซเคิล</h3>
+                <p>การทำให้ขยะกระดาษมีประโยชน์ โดยการนำไปใช้เป็น<strong>ที่ห่อผ้าอนามัยในห้องน้ำหญิง</strong> เพื่อช่วยลดปัญหาด้านสิ่งแวดล้อมและให้ความสะดวกสบายแก่นักเรียน</p>
+
+                <div style="margin-top: 2rem;">
+                    <a href="#" data-page="home" class="btn btn-primary">กลับหน้าแรก</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Page -->
+        <div id="members" class="page">
+            <div class="content-section">
+                <h2>👥 สมาชิกของเรา</h2>
+
+                <p>LS.LEAD ประกอบด้วยผู้บริหาร ผู้เชี่ยวชาญ และผู้ที่มีความหลงใหลในการสร้างการเปลี่ยนแปลง</p>
+
+                <div class="members-grid">
+                    <div class="member-card">
+                        <h4>🎭 สมาชิก 1</h4>
+                        <p>ประธาน
+ชื่อเล่น: การ์ตูน
+IG: c_cgxxkm011</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>💼 สมาชิก 2</h4>
+                        <p>เลขาณุการ
+ชื่อเล่น:กัส
+IG:bbtareq</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🔬 สมาชิก 3</h4>
+                        <p>รองประธาน
+ชื่อเล่น:ลูกตาล
+IG:l.luk_tal</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>📊 สมาชิก 4</h4>
+                        <p>เหรัญญิก
+ชื่อเล่น:ดรีม
+IG:dreamy_kinhom</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🎨 สมาชิก 5</h4>
+                        <p>เหรัญญิก
+ชื่อเล่น:นาเดีย
+IG:t_jpwx</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🚀 สมาชิก 6</h4>
+                        <p>ดูแลแถว
+ชื่อเล่น:แอร์
+IG:z_me_.13</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>💡 สมาชิก 7</h4>
+                        <p>ดูแลแถว
+ชื่อเล่น:แอร์
+IG:z_me_.13</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🌟 สมาชิก 8</h4>
+                        <p>เปิดเพลง
+ชื่อเล่น:ภูมิ
+IG:lmxkng_19</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🎯 สมาชิก 9</h4>
+                        <p>เปิดเพลง
+ชื่อเล่น:เฟส
+IG:thiphphratn2</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>✨ สมาชิก 10</h4>
+                        <p>เปิดเพลง
+ชื่อเล่น:ข้าวตัง
+IG:sranya_jantima_</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🔗 สมาชิก 11</h4>
+                        <p>หัวหน้าประชาสัมพันธ์
+ชื่อเล่น:มิ้น
+IG:ppt_mmd</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🏆 สมาชิก 12</h4>
+                        <p>ประชาสัมพันธ์สื่อสาร 
+ชื่อเล่น:มีฟา
+IG:mfra._09</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🌈 สมาชิก 13</h4>
+                        <p>ประชาสัมพันธ์สื่อสาร 
+ชื่อเล่น:ข้าวฟ่อน
+IG:sxnfon</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>💫 สมาชิก 14</h4>
+                        <p>ประชาสัมพันธ์สื่อสาร 
+ชื่อเล่น:เอมมี่
+IG:pxphxchayxq_</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🎪 สมาชิก 15</h4>
+                        <p>ประชาสัมพันธ์สื่อสาร 
+ชื่อเล่น:อาย
+IG:llly._cat</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🌺 สมาชิก 16</h4>
+                        <p>ตอบเพลง
+ชื่อเล่น:กี้ด
+IG:greed_.37870</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🎬 สมาชิก 17</h4>
+                        <p>ดูแลแอคสภา
+ชื่อเล่น:ซีตาร์
+IG:zeetra_a</p>
+                    </div>
+                    <div class="member-card">
+                        <h4>🌍 สมาชิก 18</h4>
+                        <p>ออนไลน์
+ชื่อเล่น:นที
+IG:wiessdyhwaay</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <a href="#" data-page="home" class="btn btn-primary">กลับหน้าแรก</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <p>&copy; 2026 LS.LEAD องค์กร | ทุกสิทธิ์สงวน</p>
+            <p>สร้างด้วย ✨ สำหรับอนาคตที่ดีขึ้น</p>
+            
+          <script>
+        // Page Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const cardLinks = document.querySelectorAll('[data-page]');
+        const pages = document.querySelectorAll('.page');
+
+        function showPage(pageId) {
+            // Hide all pages
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Update nav links
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Nav link clicks
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // Card link clicks
+        cardLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const targetId = e.target.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
